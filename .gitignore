@@ -9,3 +9,7 @@
 /mylibrary
 .externalNativeBuild
 /app/build
+/app/libs
+/app/release
+/app/src/androidTest
+/app/src/test
