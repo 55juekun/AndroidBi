@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillViewport="true">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="#999">
+
+        <ListView
+            android:id="@+id/list_one"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/btn_map_normal"
+            android:layout_alignParentTop="true"/>
+        <Button
+            android:id="@+id/btn_map_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="普通地图"
+            android:layout_above="@id/btn_map_traffic" />
+        <Button
+            android:id="@+id/btn_map_traffic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="交通地图"
+            android:layout_above="@id/btn_map_satellite" />
+        <Button
+            android:id="@+id/btn_map_satellite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/exit"
+            android:text="卫星地图" />
+
+        <Button
+            android:id="@+id/exit"
+            android:text="退出账号"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+</ScrollView>

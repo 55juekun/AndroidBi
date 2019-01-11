@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/alivc_color_player_background">
+
+    <com.aliyun.vodplayerview.widget.AliyunVodPlayerView
+        android:id="@+id/video_view"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <FrameLayout
+        android:id="@+id/fl"
+        android:layout_below="@id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_tab_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="@color/alivc_color_player_tab_defaut"/>
+
+        <LinearLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/layout_top"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <!-- video list tab-->
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_tab_online_photo"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="拍照列表"
+                    android:textColor="@color/alivc_white"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:id="@+id/iv_online_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:background="@drawable/alivc_solution_tab_item_selector"
+                    />
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_tab_video_list"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="视频列表"
+                    android:textColor="@color/alivc_white"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:id="@+id/iv_video_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:background="@drawable/alivc_solution_tab_item_selector"/>
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_tab_download_video"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="离线视频"
+                    android:textColor="@color/alivc_white"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:id="@+id/iv_download_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:background="@drawable/alivc_solution_tab_item_selector"
+                    />
+            </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/bt_return_live"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_below="@+id/fl"
+        android:layout_centerHorizontal="true"
+        android:padding="2dp"
+        android:text="返回现场监控"
+        android:textColor="@color/alivc_blue"
+        android:textSize="18sp"/>
+    <ImageButton
+        android:id="@+id/ib_back"
+        android:layout_below="@id/fl"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_back"
+        android:onClick="Back"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+    <ImageButton
+        android:id="@+id/ib_camera_info"
+        android:layout_below="@id/fl"
+        android:layout_alignParentEnd="true"
+        android:onClick="Getinfo"
+        android:src="@drawable/info"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+    <LinearLayout
+        android:layout_below="@id/bt_return_live"
+        android:id="@+id/ll_video_list"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/video_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <RelativeLayout android:layout_width="wrap_content"
+                    android:layout_height="40sp"
+                    android:background="#fff"
+                    android:id="@+id/rl_end"
+                    android:visibility="gone"
+                    android:layout_alignParentBottom="true">
+        <ImageView
+            android:background="#000"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_height="2px"/>
+        <CheckBox
+            android:id="@+id/cb_check"
+            android:checked="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="#ff1493"
+            android:text="全选"
+            android:textSize="20sp"
+            />
+        <!--全选与全不选-->
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:text="完成"
+            android:textSize="20sp"
+            android:clickable="true"
+            android:textColor="#ff1493"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="删除"
+            android:clickable="true"
+            android:textColor="#ff1493"
+            android:textSize="20sp"
+            android:layout_marginEnd="10sp"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/tv_download_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="下载"
+            android:clickable="true"
+            android:textColor="#ff1493"
+            android:layout_marginEnd="10sp"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"
+            android:focusable="true"/>
+
+    </RelativeLayout>
+</RelativeLayout>
