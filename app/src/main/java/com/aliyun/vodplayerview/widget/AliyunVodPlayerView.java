@@ -509,6 +509,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
                 VcPlayerLog.d(TAG, "playerState = " + mAliyunVodPlayer.getPlayerState());
                 //继续播放。如果没有prepare或者stop了，需要重新prepare
                 mTipsView.hideAll();
+                isAsked=true;
                 if (mAliyunVodPlayer.getPlayerState() == PlayerState.Idle ||
                         mAliyunVodPlayer.getPlayerState() == PlayerState.Stopped) {
                     if (mAliyunPlayAuth != null) {
@@ -1716,6 +1717,9 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
      *
      * @param aliyunLocalSource 本地播放源
      */
+
+    //是否已经询问过用户联网问题，如果已经询问过则不在询问
+    boolean isAsked=false;
     public void setLocalSource(AliyunLocalSource aliyunLocalSource) {
         if (mAliyunVodPlayer == null) {
             return;
@@ -1729,8 +1733,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         if (mControlView != null) {
             mControlView.setForceQuality(true);
         }
-
-        if (NetWatchdog.is4GConnected(getContext())) {
+        if (NetWatchdog.is4GConnected(getContext())&&!isAsked) {
             if (mTipsView != null) {
                 mTipsView.showNetChangeTipView();
             }
