@@ -18,6 +18,8 @@ public class GetRecordVideo {
     public static ArrayList<AlivcVideoInfo.Video> getvideos(int id,String[] urls){
         ArrayList<AlivcVideoInfo.Video> videos =new ArrayList<>();
         for (int i = urls.length-1; i >=0 ; i--) {
+            if (urls[i].length()<30)
+                return videos;
             AlivcVideoInfo.Video video=new AlivcVideoInfo.Video();
             String name=urls[i].split("/")[3].replace("\"","");
             String[] titleAndTime=setTitleAndTime(name);
@@ -34,6 +36,8 @@ public class GetRecordVideo {
     public static ArrayList<AlivcVideoInfo.Video> getphotos(int id,String[] urls){
         ArrayList<AlivcVideoInfo.Video> videos =new ArrayList<>();
         for (int i = urls.length-1; i >=0 ; i--) {
+            if (urls[i].length()<20)
+                return videos;
             AlivcVideoInfo.Video video=new AlivcVideoInfo.Video();
             String name=urls[i].split("/")[2].replace("\"","");
             video.setTitle(name);

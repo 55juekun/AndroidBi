@@ -9,7 +9,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //todo 暂时不写入外部环境
+        //暂时不写入外部环境
         MyCrashHandler handler = new MyCrashHandler();
         Thread.setDefaultUncaughtExceptionHandler(handler);
     }

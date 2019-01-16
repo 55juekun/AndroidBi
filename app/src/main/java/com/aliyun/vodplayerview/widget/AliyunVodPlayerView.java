@@ -197,7 +197,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         //初始化网络监听器
         initNetWatchdog();
         //初始化屏幕方向监听
-        /**todo 因为它自动旋转的太过频繁了因此在此处禁止掉，若要修改应该还需要将AliyunPlayerSkinActivity 内的相关方法也去掉注释*/
+        /**因为它自动旋转的太过频繁了因此在此处禁止掉，若要修改应该还需要将AliyunPlayerSkinActivity 内的相关方法也去掉注释*/
 //        initOrientationWatchdog();
         //初始化手势对话框控制
         initGestureDialogManager();
