@@ -18,11 +18,6 @@ public class DrawMark {
         switch (status){
             case Constant.RED:
                 break;
-            case Constant.GREY:
-                ColorMatrix saturationMatrix = new ColorMatrix();
-                saturationMatrix.setSaturation(0);
-                imageMatrix.postConcat(saturationMatrix);
-                break;
             case Constant.YELLOW:
                 hueMatrix.setRotate(2,-17);
                 imageMatrix.postConcat(hueMatrix);
@@ -30,6 +25,11 @@ public class DrawMark {
             case Constant.GREEN:
                 hueMatrix.setRotate(2,-120);
                 imageMatrix.postConcat(hueMatrix);
+                break;
+            default://默认为灰色
+                ColorMatrix saturationMatrix = new ColorMatrix();
+                saturationMatrix.setSaturation(0);
+                imageMatrix.postConcat(saturationMatrix);
                 break;
         }
         paint.setColorFilter(new ColorMatrixColorFilter(imageMatrix));

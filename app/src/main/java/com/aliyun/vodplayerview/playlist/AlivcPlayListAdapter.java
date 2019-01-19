@@ -111,7 +111,7 @@ public class AlivcPlayListAdapter extends RecyclerView.Adapter<AlivcPlayListAdap
                         holder.coverImage.setImageBitmap(bitmap);
                     }
                     holder.tvVideoDuration.setText("");
-                }else {//显示录制视频
+                }else if (video.getTitle().contains(".mp4")){//显示录制视频
                     double dTime = Double.parseDouble(video.getDuration());
                     holder.tvVideoDuration.setText(Formatter.double2Date(dTime));
                     if (video.getUrl().contains("http")){
@@ -127,7 +127,6 @@ public class AlivcPlayListAdapter extends RecyclerView.Adapter<AlivcPlayListAdap
                         holder.coverImage.setImageBitmap(bitmap);
                     }
                 }
-
             }
         }
         holder.alivcVideoInfoItemLayout.setOnClickListener(new OnClickListener() {

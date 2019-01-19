@@ -126,6 +126,7 @@ public class AlivcVideoInfo {
         public void setVideoUrl(){
             this.url=PlayParameter.VIDEO_HOME_URL +groupId+"/"+videoId;
         }
+
         public void setPhotoUrl(){
             this.url=PlayParameter.PHOTO_HOME_URL +groupId+"/"+videoId;
         }
