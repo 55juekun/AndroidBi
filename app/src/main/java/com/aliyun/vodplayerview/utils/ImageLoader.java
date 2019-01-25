@@ -27,14 +27,11 @@ public class ImageLoader {
     }
 
     public void loadAsync(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap bitmap = getImageBitmap(url);
-                Message msg = mLoadImgHandler.obtainMessage();
-                msg.obj = bitmap;
-                mLoadImgHandler.sendMessage(msg);
-            }
+        new Thread(() -> {
+            Bitmap bitmap = getImageBitmap(url);
+            Message msg = mLoadImgHandler.obtainMessage();
+            msg.obj = bitmap;
+            mLoadImgHandler.sendMessage(msg);
         }).start();
     }
 

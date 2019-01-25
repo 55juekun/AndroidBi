@@ -379,23 +379,20 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
         //远程拍照功能
         tvReturnLiveOrPhoto.setText("拍照中...");
         LoadingDialog.showDialogForLoading(AliyunPlayerSkinActivity.this,"拍照中...",true);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {//通过反复向服务器查询当前照片数量来判断是否成功
-                    GetRecordVideo.takeRemotePhoto(id);
-                    int oriLength=ossPhotoInfos.size();
-                    String [] photoUrls=GetRecordVideo.getPhotosUrl(id);
-                    while (photoUrls.length==oriLength){
-                        Thread.sleep(10000);
-                        photoUrls=GetRecordVideo.getPhotosUrl(id);
-                    }
-                    ossPhotoInfos.clear();
-                    ossPhotoInfos.addAll(GetRecordVideo.getphotos(id,photoUrls));
-                    handler.sendEmptyMessage(2);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        new Thread(() -> {
+            try {//通过反复向服务器查询当前照片数量来判断是否成功
+                GetRecordVideo.takeRemotePhoto(id);
+                int oriLength=ossPhotoInfos.size();
+                String [] photoUrls=GetRecordVideo.getPhotosUrl(id);
+                while (photoUrls.length==oriLength){
+                    Thread.sleep(10000);
+                    photoUrls=GetRecordVideo.getPhotosUrl(id);
                 }
+                ossPhotoInfos.clear();
+                ossPhotoInfos.addAll(GetRecordVideo.getphotos(id,photoUrls));
+                handler.sendEmptyMessage(2);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }
@@ -441,19 +438,16 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
     };
     private void addRecordVideo(final int id) {
         //主要是将oss录制的视频链接获取到，并添加对应video，添加完毕之后刷新ui
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String [] videoUrls = GetRecordVideo.getVideosUrl(id);
-                    ossVideoInfos.addAll(GetRecordVideo.getvideos(id,videoUrls));
-                    alivcVideoInfos.addAll(ossVideoInfos);
-                    String [] photoUrls = GetRecordVideo.getPhotosUrl(id);
-                    ossPhotoInfos.addAll(GetRecordVideo.getphotos(id,photoUrls));
-                    handler.sendEmptyMessage(1);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                String [] videoUrls = GetRecordVideo.getVideosUrl(id);
+                ossVideoInfos.addAll(GetRecordVideo.getvideos(id,videoUrls));
+                alivcVideoInfos.addAll(ossVideoInfos);
+                String [] photoUrls = GetRecordVideo.getPhotosUrl(id);
+                ossPhotoInfos.addAll(GetRecordVideo.getphotos(id,photoUrls));
+                handler.sendEmptyMessage(1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
 

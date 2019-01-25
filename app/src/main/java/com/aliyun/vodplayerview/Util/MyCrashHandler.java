@@ -64,33 +64,30 @@ public class MyCrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
     private void writeStringToFile(final String errorMessage, final File file) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FileOutputStream outputStream = null;
-                try {
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(errorMessage.getBytes());
+        new Thread(() -> {
+            FileOutputStream outputStream = null;
+            try {
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(errorMessage.getBytes());
 
-                    SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd-HH-mm-ss");
-                    outputStream = new FileOutputStream(new File(file,simpleDateFormat.format(new Date())+".txt"));
-                    int len = 0;
-                    byte[] bytes = new byte[1024];
-                    while ((len = inputStream.read(bytes)) != -1) {
-                        outputStream.write(bytes, 0, len);
-                    }
-                    outputStream.flush();
-                    Log.e("程序出异常了", "写入本地文件成功：" + file.getAbsolutePath());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (outputStream != null) {
-                        try {
-                            outputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd-HH-mm-ss");
+                outputStream = new FileOutputStream(new File(file,simpleDateFormat.format(new Date())+".txt"));
+                int len = 0;
+                byte[] bytes = new byte[1024];
+                while ((len = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, len);
+                }
+                outputStream.flush();
+                Log.e("程序出异常了", "写入本地文件成功：" + file.getAbsolutePath());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }

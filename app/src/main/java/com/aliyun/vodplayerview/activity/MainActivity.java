@@ -188,34 +188,31 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
     @Override
     protected void onResume() {
         super.onResume();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new Connect_sql().login();
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-                Bitmap oriBitmap= BitmapFactory.decodeResource(getResources(),R.drawable.icon_gcoding);
-                MarkInfo[] markInfos=new GetTree().getMarkInfos();
-                DrawMark drawMark=new DrawMark();
-                for (int i = 0; i <markInfos.length ; i++) {
-                    LatLng pointLat=new LatLng(markInfos[i].getLatitude(),markInfos[i].getLongitude());
-                    /*因为用户自定义的id不是简单的数字，因此需要将其_-作为分隔符，将之后的最后一个值作为数字标记*/
-                    String fullStringId=markInfos[i].getUseId();
-                    fullStringId.replaceAll("_","-");
-                    String[] fullStringIdArray=fullStringId.split("-");
-                    String nO=String.valueOf(fullStringIdArray[fullStringIdArray.length-1]);
-                    BitmapDescriptor bitmap= BitmapDescriptorFactory.fromBitmap(drawMark.setBitmap(oriBitmap,markInfos[i].getStatus(),nO ));
-                    Bundle bundle=new Bundle();
-                    String msg=markInfos[i].getInfoWindowMsg();
-                    bundle.putString("msg",msg);
-                    int cameraId=markInfos[i].getCameraId();
-                    bundle.putInt("id",cameraId);
-                    OverlayOptions options=new MarkerOptions().position(pointLat).icon(bitmap).draggable(false).perspective(true).extraInfo(bundle);
-                    mBaiduMap.addOverlay(options);
-                    markerOptions.add(options);
-                }
+        new Thread(() -> {
+            try {
+                new Connect_sql().login();
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            Bitmap oriBitmap= BitmapFactory.decodeResource(getResources(),R.drawable.icon_gcoding);
+            MarkInfo[] markInfos=new GetTree().getMarkInfos();
+            DrawMark drawMark=new DrawMark();
+            for (int i = 0; i <markInfos.length ; i++) {
+                LatLng pointLat=new LatLng(markInfos[i].getLatitude(),markInfos[i].getLongitude());
+                /*因为用户自定义的id不是简单的数字，因此需要将其_-作为分隔符，将之后的最后一个值作为数字标记*/
+                String fullStringId=markInfos[i].getUseId();
+                fullStringId.replaceAll("_","-");
+                String[] fullStringIdArray=fullStringId.split("-");
+                String nO=String.valueOf(fullStringIdArray[fullStringIdArray.length-1]);
+                BitmapDescriptor bitmap= BitmapDescriptorFactory.fromBitmap(drawMark.setBitmap(oriBitmap,markInfos[i].getStatus(),nO ));
+                Bundle bundle=new Bundle();
+                String msg=markInfos[i].getInfoWindowMsg();
+                bundle.putString("msg",msg);
+                int cameraId=markInfos[i].getCameraId();
+                bundle.putInt("id",cameraId);
+                OverlayOptions options=new MarkerOptions().position(pointLat).icon(bitmap).draggable(false).perspective(true).extraInfo(bundle);
+                mBaiduMap.addOverlay(options);
+                markerOptions.add(options);
             }
         }).start();
     }

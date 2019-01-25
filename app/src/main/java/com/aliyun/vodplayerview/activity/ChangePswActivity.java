@@ -110,12 +110,7 @@ public class ChangePswActivity extends AppCompatActivity {
     }
     public void changePsw(){
         if (check()){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    postMsg();
-                }
-            }).start();
+            new Thread(() -> postMsg()).start();
         }
     }
 
