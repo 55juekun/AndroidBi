@@ -17,7 +17,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.aliyun.vodplayerview.Util.Connect_sql;
+import com.aliyun.vodplayerview.Util.ConnectServer;
+import com.aliyun.vodplayerview.Util.User;
 import com.bi.PermissionUtils;
 import com.bi.R;
 
@@ -31,7 +32,7 @@ public class WelcomeActivity extends AppCompatActivity{
     private static final int PERMISSION_REQUEST_CODE = 1001;
 
     private SharedPreferences sp=null;
-    String username,psw;
+    String userid,psw;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +42,10 @@ public class WelcomeActivity extends AppCompatActivity{
             PermissionUtils.requestPermissions(this, permission, PERMISSION_REQUEST_CODE);
         }
         sp=getApplicationContext().getSharedPreferences("userinfo",MODE_PRIVATE);
-        username=sp.getString("uname", null);
-        psw=sp.getString("upswd", null);
+        userid=sp.getString("uid", null);
+        psw=sp.getString("upsw", null);
         if (checkResult) {
-            if (username == null || psw == null) {
+            if (userid == null || psw == null) {
                 new Thread(() -> {
                     try {
                         Thread.sleep(1000);
@@ -60,8 +61,10 @@ public class WelcomeActivity extends AppCompatActivity{
                     Message message = new Message();
                     try {
                         Thread.sleep(1500);
-                        new Connect_sql().setUser(username, LoginActivity.MD5(psw));
-                        new Connect_sql().login();
+                        new ConnectServer().setUserMsg(userid, LoginActivity.MD5(psw));
+                        new ConnectServer().login();
+                        User user=new ConnectServer().getUser(userid,LoginActivity.MD5(psw));
+                        ((MyApp)getApplication()).setUser(user);
                         message.what = 0;
                     } catch (Exception e) {
                         message.what = 1;

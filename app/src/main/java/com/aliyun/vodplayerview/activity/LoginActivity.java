@@ -19,8 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.aliyun.vodplayerview.Util.Connect_sql;
+import com.aliyun.vodplayerview.Util.ConnectServer;
 import com.aliyun.vodplayerview.Util.LoadingDialog;
+import com.aliyun.vodplayerview.Util.User;
 import com.bi.R;
 
 import org.json.JSONException;
@@ -30,14 +31,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
-    private EditText username;
+    private EditText userid;
     private EditText psw;
     private Button login;
     private TextView register;
     private ToggleButton toggleButton;
     private CheckBox remember;
 
-    private String usernameStr;
+    private String useridStr;
     private String pswStr;
 
     private Context mContext;
@@ -77,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
-        username=findViewById(R.id.username);
+        userid=findViewById(R.id.userid);
         psw=findViewById(R.id.password);
         login=findViewById(R.id.login);
         register=findViewById(R.id.register);
@@ -103,8 +104,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (sp.getBoolean("checkboxBoolean", false))
         {
-            username.setText(sp.getString("uname", null));
-            psw.setText(sp.getString("upswd", null));
+            userid.setText(sp.getString("uid", null));
+            psw.setText(sp.getString("upsw", null));
             remember.setChecked(true);
         }
     }
@@ -113,32 +114,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.login:
-                usernameStr=username.getText().toString();
+                useridStr=userid.getText().toString();
                 pswStr=psw.getText().toString();
                 boolean CheckBoxLogin = remember.isChecked();
                 if (CheckBoxLogin)
                 {
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("uname", usernameStr);
-                    editor.putString("upswd", pswStr);
+                    editor.putString("uid", useridStr);
+                    editor.putString("upsw", pswStr);
                     editor.putBoolean("checkboxBoolean", true);
                     editor.apply();
                 }
                 else
                 {
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("uname", null);
-                    editor.putString("upswd", null);
+                    editor.putString("uid", null);
+                    editor.putString("upsw", null);
                     editor.putBoolean("checkboxBoolean", false);
                     editor.apply();
                 }
-                LoadingDialog.showDialogForLoading(LoginActivity.this,"正在登陆...",false);
+                LoadingDialog.showDialogForLoading(LoginActivity.this,"正在登录...",false);
                 new Thread(() -> {
                     Message message=new Message();
                     try {
-//                            new Connect_sql().login(usernameStr,MD5(pswStr));
-                        new Connect_sql().setUser(usernameStr,MD5(pswStr));
-                        new Connect_sql().login();
+                        new ConnectServer().setUserMsg(useridStr,MD5(pswStr));
+                        new ConnectServer().login();
+                        User user=new ConnectServer().getUser(useridStr,MD5(pswStr));
+                        ((MyApp)getApplication()).setUser(user);
                         message.what=2;
                     } catch (IOException e) {
                         message.what=4;

@@ -6,10 +6,10 @@ public class Constant {
      * 用户管理中不同的访问权限
      */
     public static final int ADMIN=1;
-    public static final int COUNTRY=2;
-    public static final int PROVINCE=3;
-    public static final int CITY=4;
-    public static final int NONE=5;
+    public static final int LINE=2;
+    public static final int GROUP=3;
+    public static final int POINT=4;
+    public static final int IDCHANGE=5;
 
     /**
      * 摄像头不同的当前网络状态

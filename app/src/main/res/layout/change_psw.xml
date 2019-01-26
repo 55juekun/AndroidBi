@@ -17,9 +17,9 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textSize="18.0sp"
-            android:text="姓名： "/>
+            android:text="工号： "/>
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/userid"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -32,6 +33,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,11 +46,14 @@ import android.widget.Toast;
 import com.alivc.player.VcPlayerLog;
 import com.aliyun.vodplayer.media.AliyunLocalSource;
 import com.aliyun.vodplayer.media.IAliyunVodPlayer;
+import com.aliyun.vodplayerview.Util.ConnectServer;
+import com.aliyun.vodplayerview.Util.Constant;
 import com.aliyun.vodplayerview.Util.GetLiveUrl;
 import com.aliyun.vodplayerview.Util.GetTree;
 import com.aliyun.vodplayerview.Util.LoadingDialog;
 import com.aliyun.vodplayerview.Util.MarkInfo;
 import com.aliyun.vodplayerview.Util.ScreenRecordService;
+import com.aliyun.vodplayerview.Util.User;
 import com.aliyun.vodplayerview.constants.PlayParameter;
 import com.aliyun.vodplayerview.playlist.AlivcPlayListAdapter;
 import com.aliyun.vodplayerview.playlist.AlivcVideoInfo;
@@ -171,7 +176,7 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
         for (MarkInfo markInfo1 : markInfos) {
             if (markInfo1.getCameraId() == id) {
                 markInfo=markInfo1;
-               markinfo_path =markInfo.getLine()+"/"+markInfo.getGroup()+"/"+markInfo.getPoint()+"/"+markInfo.getUseId();
+                markinfo_path =markInfo.getLine()+"/"+markInfo.getGroup()+"/"+markInfo.getPoint()+"/"+markInfo.getUseId();
                 break;
             }
         }
@@ -414,13 +419,71 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
         }
     }
 
+    //info按鈕功能
     public void Getinfo(View view){
-        //info按鈕功能
-                AlertDialog.Builder builder=new AlertDialog.Builder(AliyunPlayerSkinActivity.this);
-                AlertDialog alert=builder
-                        .setMessage(markInfo.getInfoWindowMsg()).setPositiveButton("确定",null).create();
-                alert.show();
+        View info_view = View.inflate(AliyunPlayerSkinActivity.this, R.layout.info_dialog, null);
+        TextView tvCameraId=info_view.findViewById(R.id.tv_camera_id);
+        TextView tvCameraAddress=info_view.findViewById(R.id.tv_camera_address);
+        TextView tvCameraProjectName=info_view.findViewById(R.id.tv_camera_project_name);
+        TextView tvCameraNote=info_view.findViewById(R.id.tv_camera_note);
+        EditText etCameraLine=info_view.findViewById(R.id.et_camera_line);
+        EditText etCameraGroup=info_view.findViewById(R.id.et_camera_group);
+        EditText etCameraPoint=info_view.findViewById(R.id.et_camera_point);
+        EditText etCameraUseId=info_view.findViewById(R.id.et_camera_useId);
+        User user=((MyApp)getApplication()).getUser();
+
+        tvCameraId.setText("设备编号："+markInfo.getCameraId());
+        tvCameraAddress.setText("地址："+markInfo.getAddress());
+        tvCameraProjectName.setText("项目名称："+markInfo.getProjectName());
+        tvCameraNote.setText("备注："+markInfo.getNote());
+        etCameraLine.setText(markInfo.getLine());
+        etCameraGroup.setText(markInfo.getGroup());
+        etCameraPoint.setText(markInfo.getPoint());
+        etCameraUseId.setText(markInfo.getUseId());
+        switch (user.getPrivilege()){
+            case Constant.IDCHANGE:
+                etCameraLine.setEnabled(false);
+                etCameraGroup.setEnabled(false);
+                etCameraPoint.setEnabled(false);
+                break;
+            default:
+                etCameraLine.setEnabled(false);
+                etCameraGroup.setEnabled(false);
+                etCameraPoint.setEnabled(false);
+                etCameraUseId.setEnabled(false);
+                break;
+        }
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(AliyunPlayerSkinActivity.this);
+        AlertDialog alert=builder.setView(info_view).setPositiveButton("保存", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (user.getPrivilege()<5){
+                    return;
+                }
+                markInfo.setLine(etCameraLine.getText().toString());
+                markInfo.setGroup(etCameraGroup.getText().toString());
+                markInfo.setPoint(etCameraPoint.getText().toString());
+                markInfo.setUseId(etCameraUseId.getText().toString());
+                markinfo_path =markInfo.getLine()+"/"+markInfo.getGroup()+"/"+markInfo.getPoint()+"/"+markInfo.getUseId();
+                LoadingDialog.showDialogForLoading(AliyunPlayerSkinActivity.this,"修改中...",true);
+                new Thread(()->{
+                    String responserStr=new ConnectServer().changeMarkinfo(user,markInfo);
+                Message toastMessage=new Message();
+                    if (responserStr.equals("ok")){
+                        toastMessage.obj="修改成功";
+                    }else {
+                        toastMessage.obj="修改失败";
+                    }
+                    toastMessage.what=3;
+                    handler.sendMessage(toastMessage);
+                } ).start();
+            }
+        }).setNegativeButton("取消",null).create();
+        alert.show();
     }
+
+
 
     @SuppressLint("HandlerLeak")
             //主要是刷新ui
@@ -432,6 +495,10 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             alivcPlayListAdapter.notifyDataSetChanged();
             if (msg.what==2){
                 Toast.makeText(getApplicationContext(),"拍照完成，请刷新拍照列表查看",Toast.LENGTH_SHORT).show();
+                LoadingDialog.cancelDialogForLoading();
+            }
+            if (msg.what==3){
+                Toast.makeText(getApplicationContext(), (String) msg.obj,Toast.LENGTH_SHORT).show();
                 LoadingDialog.cancelDialogForLoading();
             }
         }

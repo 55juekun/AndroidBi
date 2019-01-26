@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.aliyun.vodplayerview.Util.Connect_sql;
+import com.aliyun.vodplayerview.Util.ConnectServer;
 import com.aliyun.vodplayerview.Util.DrawMark;
 import com.aliyun.vodplayerview.Util.GetTree;
 import com.aliyun.vodplayerview.Util.MarkInfo;
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
                             Intent intent=new Intent(MainActivity.this,AliyunPlayerSkinActivity.class);
                             intent.putExtra("id",marker.getExtraInfo().getInt("id"));
                             startActivity(intent);
+                            mBaiduMap.hideInfoWindow();
                         }
                     });
                     InfoWindow infoWindow = new InfoWindow(textView, position, -47);
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
         super.onResume();
         new Thread(() -> {
             try {
-                new Connect_sql().login();
+                new ConnectServer().login();
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
