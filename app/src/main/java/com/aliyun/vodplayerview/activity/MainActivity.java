@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -40,6 +41,7 @@ import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.district.DistrictResult;
 import com.baidu.mapapi.search.district.DistrictSearch;
 import com.baidu.mapapi.search.district.OnGetDistricSearchResultListener;
+import com.baidu.mapapi.utils.CoordinateConverter;
 import com.bi.R;
 
 import org.json.JSONException;
@@ -91,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
         mDistrictSearch.setOnDistrictSearchListener(this);
         mBaiduMap = mMapView.getMap();
         fg_left_menu.setBaiduMap(mBaiduMap);
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NONE);
+        //之前是无地图模式，总感觉不爽，默认还是普通地图吧
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         MapStatusUpdate msu= MapStatusUpdateFactory.newLatLngZoom(new LatLng(30.771268,103.974595),5.0f);
         mBaiduMap.setMapStatus(msu);
         mBaiduMap.getUiSettings().setCompassEnabled(true);
@@ -199,7 +202,13 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
             MarkInfo[] markInfos=new GetTree().getMarkInfos();
             DrawMark drawMark=new DrawMark();
             for (int i = 0; i <markInfos.length ; i++) {
-                LatLng pointLat=new LatLng(markInfos[i].getLatitude(),markInfos[i].getLongitude());
+                CoordinateConverter converter  = new CoordinateConverter();
+                converter.from(CoordinateConverter.CoordType.GPS);
+                // sourceLatLng GPS硬件获取到的原始坐标
+                converter.coord(new LatLng(markInfos[i].getLatitude(),markInfos[i].getLongitude()));
+                //pointLat 经过转换后的百度地图坐标
+                LatLng pointLat = converter.convert();
+                Log.d("55juekun", "onResume: " + pointLat.latitude +"     "+pointLat.longitude);
                 /*因为用户自定义的id不是简单的数字，因此需要将其_-作为分隔符，将之后的最后一个值作为数字标记*/
                 String fullStringId=markInfos[i].getUseId();
                 fullStringId.replaceAll("_","-");

@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.aliyun.vodplayerview.activity.LoginActivity;
+import com.aliyun.vodplayerview.activity.MyApp;
 import com.baidu.mapapi.map.BaiduMap;
 import com.bi.R;
 
@@ -30,15 +32,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private Context context=null;
     private ListView listView;
     private BaiduMap mBaiduMap;
+    private TextView tvUserName;
+    private TextView tvUserMsg;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_layout, container, false);
+        tvUserName=view.findViewById(R.id.tv_username);
+        tvUserMsg=view.findViewById(R.id.tv_user_msg);
+        User user=((MyApp)getActivity().getApplication()).getUser();
+        tvUserName.setText(user.getUserName());
+        tvUserMsg.setText(user.getUserMsgProfile());
         view.findViewById(R.id.btn_map_normal).setOnClickListener(this);
         view.findViewById(R.id.btn_map_traffic).setOnClickListener(this);
         view.findViewById(R.id.btn_map_satellite).setOnClickListener(this);
-//        view.findViewById(R.id.btn_refresh).setOnClickListener(this);
         view.findViewById(R.id.exit).setOnClickListener(this);
         fManager = getActivity().getSupportFragmentManager();
         context = getActivity();

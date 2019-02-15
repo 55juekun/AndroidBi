@@ -67,7 +67,8 @@ public class PermissionUtils {
         boolean result = false;
         for (String permission : permissions) {
             result = checkPersmission(context, permission);
-
+            if (!result)
+                return false;
         }
         return result;
     }

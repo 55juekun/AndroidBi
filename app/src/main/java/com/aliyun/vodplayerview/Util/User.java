@@ -97,14 +97,17 @@ public class User {
 
     public String getShowData(String oriStr){
         if (oriStr.length()<3){
-            oriStr="全部";
+            oriStr="ALL";
         }else {
             oriStr= oriStr.substring(1, oriStr.length() - 1);
         }
         return oriStr;
     }
-    public String getUserMsg() {
+    public String getUserMsgToast() {
         String UserMsg = "工号：" + userId + "\n用户名：" + userName + "\n权限：" + getPrivilegeString() + "\n可查看线：" + getShowData(lines)+  "\n可查看组：" + getShowData(groups) +  "\n可查看点：" + getShowData(points);
         return UserMsg;
+    }
+    public String getUserMsgProfile(){
+        return "工号：" + userId+"    " + getPrivilegeString() + "权限\n" + getShowData(lines)+  "/" + getShowData(groups) +  "/" + getShowData(points);
     }
 }

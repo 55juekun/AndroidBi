@@ -54,7 +54,6 @@ public class ConnectServer {
             GetTree.markInfos.add(markInfo);
         }
     }
-
     /**
      * @Description:
      * @Title: getUser
