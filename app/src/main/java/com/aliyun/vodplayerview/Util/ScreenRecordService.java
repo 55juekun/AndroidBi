@@ -83,16 +83,13 @@ public class ScreenRecordService extends Service {
         // 图片文件路径
         String filePathName = sdCardPath + "/" + simpleDateFormat.format(new Date()) + "_" + mCameraPath.replaceAll("/", "") + ".mp4";
         MediaRecorder mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mediaRecorder.setVideoEncodingBitRate(5 * mScreenWidth * mScreenHeight);
         mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mediaRecorder.setVideoSize(mScreenWidth, mScreenHeight);
-        mediaRecorder.setVideoFrameRate(60);
+        mediaRecorder.setVideoFrameRate(30);
         mediaRecorder.setOutputFile(filePathName);
-
         try {
             mediaRecorder.prepare();
         } catch (Exception e) {
