@@ -27,7 +27,6 @@
             android:id="@+id/tv_video_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="3dp"
             android:textSize="10sp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"

@@ -46,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_portrait"
                 android:singleLine="false"
-                android:text="asdkhjakdhsakjdasdhbasadasd"
                 android:textColor="@color/alivc_gesture_text_color"/>
 
         </RelativeLayout>

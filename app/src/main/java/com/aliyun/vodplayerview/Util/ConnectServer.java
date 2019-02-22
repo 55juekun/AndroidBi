@@ -28,7 +28,7 @@ public class ConnectServer {
     public void login(String userid, String psw) throws IOException, JSONException {
         OkHttpClient httpClient=new OkHttpClient();
         RequestBody formBody = new FormBody.Builder().add("userid", userid).add("psw",psw).build();
-        Request request=new Request.Builder().url("http://113.54.152.9/login").post(formBody).build();
+        Request request=new Request.Builder().url("http://cnrail2.cn/login").post(formBody).build();
         Response response= httpClient.newCall(request).execute();
         String responseMsg=response.body().string();
         JSONArray jsonArray=new JSONArray(responseMsg);
@@ -65,7 +65,7 @@ public class ConnectServer {
     public User getUser(String userid,String psw){
         OkHttpClient httpClient=new OkHttpClient();
         RequestBody formBody = new FormBody.Builder().add("userid", userid).add("psw",psw).build();
-        Request request=new Request.Builder().url("http://113.54.152.9/getUser").post(formBody).build();
+        Request request=new Request.Builder().url("http://cnrail2.cn/getUser").post(formBody).build();
         User user=new User();
         try {
             Response response= httpClient.newCall(request).execute();
@@ -93,7 +93,7 @@ public class ConnectServer {
                 .add("group",markInfo.getGroup())
                 .add("point",markInfo.getPoint())
                 .add("useId",markInfo.getUseId()).build();
-        Request request=new Request.Builder().url("http://113.54.152.9/changeUseID").post(formBody).build();
+        Request request=new Request.Builder().url("http://cnrail2.cn/changeUseID").post(formBody).build();
         String responseMsg="";
         try {
             Response response= httpClient.newCall(request).execute();

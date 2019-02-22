@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:inputType="number"
             android:hint="请输入您的工号"
             android:text="99"
             android:background="@null"

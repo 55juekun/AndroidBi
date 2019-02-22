@@ -925,7 +925,6 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             mAliyunVodPlayerView.setLocalSource(localSource);
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();

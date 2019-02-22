@@ -21,6 +21,7 @@
         <EditText
             android:id="@+id/userid"
             android:layout_width="160dp"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#fff"

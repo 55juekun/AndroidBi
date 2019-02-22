@@ -116,7 +116,7 @@ public class ChangePswActivity extends AppCompatActivity {
         Message msg=new Message();
         try {
             OkHttpClient httpClient=new OkHttpClient();
-            Request request=new Request.Builder().url("http://113.54.152.9/changePsw?userid="+useridStr+"&oldpsw="+MD5(oldPswStr)+"&newpsw="+MD5(newPswStr)).build();
+            Request request=new Request.Builder().url("http://cnrail2.cn/changePsw?userid="+useridStr+"&oldpsw="+MD5(oldPswStr)+"&newpsw="+MD5(newPswStr)).build();
             Response response= httpClient.newCall(request).execute();
             String responseMsg=response.body().string();
             if (responseMsg.equals("ok")){
