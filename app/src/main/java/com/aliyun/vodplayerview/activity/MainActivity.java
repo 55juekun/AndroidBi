@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         MapStatusUpdate msu= MapStatusUpdateFactory.newLatLngZoom(new LatLng(30.771268,103.974595),5.0f);
         mBaiduMap.setMapStatus(msu);
-        mBaiduMap.getUiSettings().setCompassEnabled(true);
+        mBaiduMap.getUiSettings().setCompassEnabled(false);
         mMapView.showScaleControl(true);
 
         left_drawer_open.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
                 converter.coord(new LatLng(markInfos[i].getLatitude(),markInfos[i].getLongitude()));
                 //pointLat 经过转换后的百度地图坐标
                 LatLng pointLat = converter.convert();
-                Log.d("55juekun", "onResume: " + pointLat.latitude +"     "+pointLat.longitude);
                 /*因为用户自定义的id不是简单的数字，因此需要将其_-作为分隔符，将之后的最后一个值作为数字标记*/
                 String fullStringId=markInfos[i].getUseId();
                 fullStringId.replaceAll("_","-");

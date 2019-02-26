@@ -28,7 +28,6 @@
             android:ems="10"
             android:inputType="number"
             android:hint="请输入您的工号"
-            android:text="99"
             android:background="@null"
             android:padding="5.0dip"
             android:paddingEnd="40dp"
@@ -44,14 +43,12 @@
         android:orientation="horizontal"
         android:padding="10sp"
         android:background="#fff">
-        <!-- 请输入密码的布局 -->
         <EditText
             android:id="@+id/password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="请输入您的密码"
-            android:text="123"
             android:background="@null"
             android:textColorHint="#888"
             android:inputType="textPassword"

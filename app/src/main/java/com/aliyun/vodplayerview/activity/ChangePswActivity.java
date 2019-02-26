@@ -119,9 +119,9 @@ public class ChangePswActivity extends AppCompatActivity {
             Request request=new Request.Builder().url("http://cnrail2.cn/changePsw?userid="+useridStr+"&oldpsw="+MD5(oldPswStr)+"&newpsw="+MD5(newPswStr)).build();
             Response response= httpClient.newCall(request).execute();
             String responseMsg=response.body().string();
-            if (responseMsg.equals("ok")){
+            if (responseMsg.equals("1")){
                 msg.what=1;
-            }else if (responseMsg.equals("error")){
+            }else if (responseMsg.equals("0")){
                 msg.what=2;
             }else {
                 msg.what=3;

@@ -495,6 +495,7 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             alivcPlayListAdapter.notifyDataSetChanged();
             if (msg.what==2){
                 Toast.makeText(getApplicationContext(),"拍照完成，请刷新拍照列表查看",Toast.LENGTH_SHORT).show();
+                tvReturnLiveOrPhoto.setText("点击拍照");
                 LoadingDialog.cancelDialogForLoading();
             }
             if (msg.what==3){
