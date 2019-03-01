@@ -1,68 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_width="match_parent"
+
+<RelativeLayout
+    android:layout_width="250dp"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="true">
+    android:background="#999"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
+        android:id="@+id/rl_profile"
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/protrait_background">
+
+        <ImageView
+            android:id="@+id/iv_portrait"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="45dp"
+            android:src="@drawable/login_head"/>
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="55dp"
+            android:layout_toEndOf="@id/iv_portrait"
+            android:textColor="@color/alivc_color_action_list_dialog_background"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/tv_user_msg"
+            android:layout_width="250dp"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_portrait"
+            android:singleLine="false"
+            android:textColor="@color/alivc_gesture_text_color"/>
+    </RelativeLayout>
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#999"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/rl_profile"
-            android:layout_width="250dp"
-            android:layout_height="200dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/protrait_background">
-
-            <ImageView
-                android:id="@+id/iv_portrait"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="55dp"
-                android:layout_marginTop="45dp"
-                android:src="@drawable/login_head"/>
-
-            <TextView
-                android:id="@+id/tv_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="55dp"
-                android:layout_toRightOf="@id/iv_portrait"
-                android:text="abc"
-                android:textColor="@color/alivc_color_action_list_dialog_background"
-                android:textSize="24sp"/>
-
-            <TextView
-                android:id="@+id/tv_user_msg"
-                android:layout_width="250dp"
-                android:gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/iv_portrait"
-                android:singleLine="false"
-                android:textColor="@color/alivc_gesture_text_color"/>
-
-        </RelativeLayout>
-
+        android:layout_below="@id/rl_profile"
+        android:layout_above="@id/rl_button_group"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:fillViewport="true">
 
         <ListView
             android:id="@+id/list_one"
             android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rl_profile"/>
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rl_button_group"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/btn_map_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/btn_map_traffic"
-            android:layout_toRightOf="@id/btn_map_satellite"
+            android:layout_toEndOf="@id/btn_map_satellite"
             android:text="普通地图"/>
 
         <Button
@@ -84,9 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/btn_map_traffic"
+            android:layout_toEndOf="@id/btn_map_traffic"
             android:text="退出账号"/>
-
     </RelativeLayout>
-
-</ScrollView>
+</RelativeLayout>

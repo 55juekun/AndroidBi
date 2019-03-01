@@ -1,5 +1,6 @@
 package com.aliyun.vodplayerview.Util;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -74,7 +75,7 @@ public class ScreenRecordService extends Service {
     }
 
     private MediaRecorder createMediaRecorder() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd-HH-mm-ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd_HH:mm:ss");
         String sdCardPath = Environment.getExternalStorageDirectory().getPath() + "/CNrail2/" + mCameraPath + "/";
         File folder = new File(sdCardPath);
         if (!folder.exists()) {

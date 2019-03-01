@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
+import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
@@ -25,7 +26,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,7 +53,7 @@ import com.aliyun.vodplayerview.Util.GetLiveUrl;
 import com.aliyun.vodplayerview.Util.GetTree;
 import com.aliyun.vodplayerview.Util.LoadingDialog;
 import com.aliyun.vodplayerview.Util.MarkInfo;
-import com.aliyun.vodplayerview.Util.ScreenRecordService;
+import com.aliyun.vodplayerview.Util.ScreenRecorder;
 import com.aliyun.vodplayerview.Util.User;
 import com.aliyun.vodplayerview.constants.PlayParameter;
 import com.aliyun.vodplayerview.playlist.AlivcPlayListAdapter;
@@ -152,14 +153,11 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
     public static int id=0;
     public static String currentPlayUrl;
 
-    boolean isRecord=false;
-    int mScreenWidth;
-    int mScreenHeight;
-    int mScreenDensity;
     //用于确定是哪个摄像头，并获取到对应的信息
     MarkInfo markInfo;
     String markinfo_path;
-
+    private ScreenRecorder mRecorder;
+    private MediaProjectionManager mMediaProjectionManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -181,6 +179,7 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             }
         }
         setContentView(R.layout.alivc_player_layout_skin);
+        mMediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
 
         initAliyunPlayerView();
         initCheckALLView();
@@ -202,8 +201,8 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
 //                    new String[] {Manifest.permission.RECORD_AUDIO}, AUDIO_REQUEST_CODE);
 //        }
 
-        startScreenRecord();
-        getScreenBaseInfo();
+//        startScreenRecord();
+//        getScreenBaseInfo();
     }
 
     private void initCheckALLView() {
@@ -276,74 +275,43 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
         });
     }
 
-    private void startRecord(){
-        Message msg=new Message();
-        msg.what=2;
-        msg.obj=null;
-        handler1.sendMessage(msg);
-    }
-
-    @Override    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         setPlaySource();
         if(requestCode == 1000){
-            if(resultCode == RESULT_OK){                //获得录屏权限，启动Service进行录制
-                Intent intent=new Intent(AliyunPlayerSkinActivity.this,ScreenRecordService.class);
-                intent.putExtra("resultCode",RESULT_OK);
-                intent.putExtra("resultData",data);
-                intent.putExtra("mScreenWidth",mScreenWidth);
-                intent.putExtra("mScreenHeight",mScreenHeight);
-                intent.putExtra("mScreenDensity",mScreenDensity);
-                intent.putExtra("mCameraPath",markinfo_path);
-                Message msg=new Message();
-                msg.what=1;
-                msg.obj=intent;
-                handler1.sendMessage(msg);
-            }else{
-                Toast.makeText(this,"取消该项会导致无法录屏，请重启应用",Toast.LENGTH_SHORT).show();
+            MediaProjection mediaProjection = mMediaProjectionManager.getMediaProjection(resultCode, data);
+            if (mediaProjection == null) {
+                Log.e("@@", "media projection is null");
+                Toast.makeText(getApplicationContext(),"权限不足，无法录屏",Toast.LENGTH_SHORT).show();
+                return;
             }
+            // video size
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int height = getResources().getDisplayMetrics().heightPixels;
+            int bitrate = 5*width*height;
+
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd_HH:mm:ss");
+            String sdCardPath = Environment.getExternalStorageDirectory().getPath() + "/CNrail2/" + markinfo_path + "/";
+            File folder = new File(sdCardPath);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            // 图片文件路径
+            String filePathName = sdCardPath + "/" + simpleDateFormat.format(new Date()) + "_" + markinfo_path.replaceAll("/", "") + ".mp4";
+            mRecorder = new ScreenRecorder(width,height, bitrate, getResources().getDisplayMetrics().densityDpi, mediaProjection, filePathName);
+            mRecorder.start();
+            record_button.setBackgroundResource(R.mipmap.record_end);
+            Toast.makeText(getApplicationContext(),"录屏开始",Toast.LENGTH_SHORT).show();
         }
     }
-    private void getScreenBaseInfo() {        //A structure describing general information about a display, such as its size, density, and font scaling.
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mScreenWidth = metrics.widthPixels;
-        mScreenHeight = metrics.heightPixels;
-        mScreenDensity = metrics.densityDpi;
-    }
-
-    private void startScreenRecord() {
-        MediaProjectionManager mediaProjectionManager=(MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE); //Returns an Intent that must passed to startActivityForResult() in order to start screen capture.
-        Intent permissionIntent=mediaProjectionManager.createScreenCaptureIntent();
-        startActivityForResult(permissionIntent,1000);
-
-    }
-    @SuppressLint("HandlerLeak")
-    Handler handler1=new Handler(){
-        Intent intent;
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what==1){
-                intent = (Intent) msg.obj;
-            }else if (msg.what==2&&intent!=null){
-                startService(intent);
-                record_button.setBackgroundResource(R.mipmap.record_end);
-                Toast.makeText(getApplicationContext(),"录屏开始",Toast.LENGTH_SHORT).show();
-                isRecord=true;
-            }else {
-                Toast.makeText(getApplicationContext(),"录屏失败",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-
-    private void stopScreenRecord() {
-        Intent service = new Intent(this, ScreenRecordService.class);
-        stopService(service);
-        isRecord=false;
-        Toast.makeText(this,"录屏成功",Toast.LENGTH_SHORT).show();
-        record_button.setBackgroundResource(R.mipmap.record);
-    }
+//    private void getScreenBaseInfo() {        //A structure describing general information about a display, such as its size, density, and font scaling.
+//        DisplayMetrics metrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//        mScreenWidth = metrics.widthPixels;
+//        mScreenHeight = metrics.heightPixels;
+//        mScreenDensity = metrics.densityDpi;
+//    }
     public void Capture(){
         Bitmap bitmap =mAliyunVodPlayerView.snapShot();
         try{
@@ -354,7 +322,7 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             }
             // 图片文件路径
             @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd_HH-mm-ss");
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy.MM.dd_HH:mm:ss");
             String filePath = sdCardPath +simpleDateFormat.format(new Date())+markInfo.getLine()+markInfo.getGroup()+markInfo.getPoint()+markInfo.getUseId()+".jpg";
             File file = new File(filePath);
             FileOutputStream fileOutputStream=new FileOutputStream(file);
@@ -745,7 +713,7 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             }else {
                 File file = new File(url);
                 Intent intent = new Intent();
-                intent.setAction(android.content.Intent.ACTION_VIEW);
+                intent.setAction(Intent.ACTION_VIEW);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     Uri photoOutputUri = FileProvider.getUriForFile(
                             this,
@@ -1015,6 +983,10 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             mAliyunVodPlayerView = null;
         }
         super.onDestroy();
+        if(mRecorder != null){
+            mRecorder.quit();
+            mRecorder = null;
+        }
     }
 
     @Override
@@ -1134,10 +1106,14 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
     private class MyRecordClikListener implements ControlView.OnRecordClickListener{
         @Override
         public void onClick() {
-            if(isRecord){
-                stopScreenRecord();
-            }else{
-                startRecord();
+            if (mRecorder != null) {
+                mRecorder.quit();
+                mRecorder = null;
+                Toast.makeText(getApplicationContext(),"录屏成功",Toast.LENGTH_SHORT).show();
+                record_button.setBackgroundResource(R.mipmap.record);
+            }else {
+                Intent captureIntent = mMediaProjectionManager.createScreenCaptureIntent();
+                startActivityForResult(captureIntent, 1000);
             }
         }
     }

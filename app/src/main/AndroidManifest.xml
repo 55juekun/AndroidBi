@@ -63,9 +63,9 @@
                   android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
                   android:label="修改密码">
         </activity>
-        <service
-            android:name="com.aliyun.vodplayerview.Util.ScreenRecordService">
-        </service>
+        <!--<service-->
+            <!--android:name="com.aliyun.vodplayerview.Util.ScreenRecordService">-->
+        <!--</service>-->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.bi.fileprovider"
