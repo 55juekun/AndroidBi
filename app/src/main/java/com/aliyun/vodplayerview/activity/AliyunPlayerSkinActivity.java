@@ -189,18 +189,6 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
         initDownloadView();
         PlayLive();
 
-//        if (ContextCompat.checkSelfPermission(AliyunPlayerSkinActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
-//        }
-//
-//        if (ContextCompat.checkSelfPermission(AliyunPlayerSkinActivity.this, Manifest.permission.RECORD_AUDIO)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[] {Manifest.permission.RECORD_AUDIO}, AUDIO_REQUEST_CODE);
-//        }
-
 //        startScreenRecord();
 //        getScreenBaseInfo();
     }
@@ -291,7 +279,7 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             int height = getResources().getDisplayMetrics().heightPixels;
             int bitrate = 5*width*height;
 
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd_HH:mm:ss");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd_HH：mm：ss");
             String sdCardPath = Environment.getExternalStorageDirectory().getPath() + "/CNrail2/" + markinfo_path + "/";
             File folder = new File(sdCardPath);
             if (!folder.exists()) {
@@ -322,7 +310,7 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
             }
             // 图片文件路径
             @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy.MM.dd_HH:mm:ss");
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy.MM.dd_HH：mm：ss");
             String filePath = sdCardPath +simpleDateFormat.format(new Date())+markInfo.getLine()+markInfo.getGroup()+markInfo.getPoint()+markInfo.getUseId()+".jpg";
             File file = new File(filePath);
             FileOutputStream fileOutputStream=new FileOutputStream(file);
@@ -664,17 +652,18 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
                     file.mkdirs();
                 }
                 File[] files = file.listFiles();
-                localVideoInfos.clear();
-                for (int i =files.length-1; i >=0; i--) {
-                    AlivcVideoInfo.Video video = new AlivcVideoInfo.Video();
-                    video.setUrl(files[i].getAbsolutePath());
-                    video.setGroupId(id + "");
-                    try{
-                        video.setTitle(GetRecordVideo.setTitleAndTime(files[i].getName())[0]);
-                    }catch (Exception e){
-                        video.setTitle(files[i].getName());
-                    }
-                    video.setGroupId(id + "");
+                if (localVideoInfos.size()!=files.length) {
+                    localVideoInfos.clear();
+                    for (int i = files.length - 1; i >= 0; i--) {
+                        AlivcVideoInfo.Video video = new AlivcVideoInfo.Video();
+                        video.setUrl(files[i].getAbsolutePath());
+                        video.setGroupId(id + "");
+                        try {
+                            video.setTitle(GetRecordVideo.setTitleAndTime(files[i].getName())[0]);
+                        } catch (Exception e) {
+                            video.setTitle(files[i].getName());
+                        }
+                        video.setGroupId(id + "");
                     if (files[i].getName().contains(".mp4")){
                         MediaPlayer mediaPlayer = new MediaPlayer();
                         try {
@@ -686,7 +675,8 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
                         video.setDuration(mediaPlayer.getDuration() / 1000+"");
                         mediaPlayer.release();
                     }
-                    localVideoInfos.add(video);
+                        localVideoInfos.add(video);
+                    }
                 }
                 alivcVideoInfos.clear();
                 alivcVideoInfos.addAll(localVideoInfos);

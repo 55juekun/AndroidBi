@@ -1,9 +1,6 @@
 package com.aliyun.vodplayerview.playlist;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +15,7 @@ import com.aliyun.vodplayerview.playlist.AlivcVideoInfo.Video;
 import com.aliyun.vodplayerview.utils.Formatter;
 import com.bi.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -107,8 +105,11 @@ public class AlivcPlayListAdapter extends RecyclerView.Adapter<AlivcPlayListAdap
                                 .crossFade()
                                 .into(holder.coverImage);
                     }else {
-                        Bitmap bitmap = BitmapFactory.decodeFile(video.getUrl());
-                        holder.coverImage.setImageBitmap(bitmap);
+                        Glide.with(this.context.get())//用于设置封面url的
+                                .load(video.getUrl())
+                                .centerCrop()
+                                .crossFade()
+                                .into(holder.coverImage);
                     }
                     holder.tvVideoDuration.setText("");
                 }else if (video.getTitle().contains(".mp4")){//显示录制视频
@@ -120,11 +121,12 @@ public class AlivcPlayListAdapter extends RecyclerView.Adapter<AlivcPlayListAdap
                             .centerCrop()
                             .crossFade()
                             .into(holder.coverImage);
-                    }else {
-                        MediaMetadataRetriever media =new MediaMetadataRetriever();
-                        media.setDataSource(video.getUrl());
-                        Bitmap bitmap = media.getFrameAtTime();
-                        holder.coverImage.setImageBitmap(bitmap);
+                    }else {Glide.with(this.context.get()).
+                            load(video.getUrl()).
+                            diskCacheStrategy(DiskCacheStrategy.RESULT)
+                            .centerCrop()
+                            .crossFade()
+                            .into(holder.coverImage);
                     }
                 }
             }
