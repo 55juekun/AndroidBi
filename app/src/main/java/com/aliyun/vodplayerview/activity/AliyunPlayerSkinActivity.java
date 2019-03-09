@@ -669,11 +669,17 @@ public class AliyunPlayerSkinActivity extends AppCompatActivity {
                         try {
                             mediaPlayer.setDataSource(files[i].getPath());
                             mediaPlayer.prepare();
+                            video.setDuration(mediaPlayer.getDuration() / 1000+"");
+                            mediaPlayer.reset();
+                            mediaPlayer.release();
                         } catch (Exception e) {
                             e.printStackTrace();
+                            mediaPlayer.reset();
+                            mediaPlayer.release();
+                            Toast.makeText(getApplicationContext(),"您录制了错误视频文件，请将文件夹\n \"/CNrail2/" + markinfo_path+
+                                    files[i].getName()+"\" \n视频文件删除",Toast.LENGTH_LONG).show();
+                            continue;
                         }
-                        video.setDuration(mediaPlayer.getDuration() / 1000+"");
-                        mediaPlayer.release();
                     }
                         localVideoInfos.add(video);
                     }
