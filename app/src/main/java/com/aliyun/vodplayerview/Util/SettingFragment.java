@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.aliyun.vodplayerview.activity.LoginActivity;
 import com.aliyun.vodplayerview.activity.MyApp;
+import com.aliyun.vodplayerview.updateUtils.UpdateUtils;
 import com.baidu.mapapi.map.BaiduMap;
 import com.bi.R;
 
@@ -47,6 +48,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.btn_map_normal).setOnClickListener(this);
         view.findViewById(R.id.btn_map_traffic).setOnClickListener(this);
         view.findViewById(R.id.btn_map_satellite).setOnClickListener(this);
+        view.findViewById(R.id.btn_update_now).setOnClickListener(this);
         view.findViewById(R.id.exit).setOnClickListener(this);
         fManager = getActivity().getSupportFragmentManager();
         context = getActivity();
@@ -80,17 +82,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 mBaiduMap.setTrafficEnabled(false);
                 drawer_layout.closeDrawer(Gravity.START);
                 break;
-//            case R.id.btn_refresh:
-//                Log.e(TAG, "onClick: three" );
-//                try {
-//                    new Connect_sql().login();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                drawer_layout.closeDrawer(Gravity.START);
-//                break;
+            case R.id.btn_update_now:
+                ((MyApp)getActivity().getApplication()).setShowToast(true);
+                UpdateUtils updateUtils=new UpdateUtils(context);
+                updateUtils.reIntstall();
+                drawer_layout.closeDrawer(Gravity.START);
+                break;
             case R.id.exit:
                 Intent intent1=new Intent(getContext(),LoginActivity.class);
                 startActivity(intent1);

@@ -7,8 +7,8 @@ android {
         applicationId "com.bi"
         minSdkVersion 22
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -60,4 +60,8 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.12.0'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation files('libs/BaiduLBS_Android.jar')
+    implementation 'com.github.xuexiangjys:XUpdate:1.0.7'
+    implementation 'com.qianwen:okhttp-utils:3.8.0'
+    implementation 'com.github.xuexiangjys.XUtil:xutil-core:1.1.5'
+    implementation 'com.github.xuexiangjys.XUtil:xutil-sub:1.1.5'
 }

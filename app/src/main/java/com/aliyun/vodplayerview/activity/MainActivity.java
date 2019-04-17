@@ -21,6 +21,7 @@ import com.aliyun.vodplayerview.Util.DrawMark;
 import com.aliyun.vodplayerview.Util.GetTree;
 import com.aliyun.vodplayerview.Util.MarkInfo;
 import com.aliyun.vodplayerview.Util.SettingFragment;
+import com.aliyun.vodplayerview.updateUtils.UpdateUtils;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -79,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements OnGetDistricSearc
         mainContext=getApplicationContext();
         fManager = getSupportFragmentManager();
         initView();
+        UpdateUtils updateUtils=new UpdateUtils(this);
+        ((MyApp)getApplication()).setShowToast(false);
+        updateUtils.intstall();
     }
 
     public void initView(){
